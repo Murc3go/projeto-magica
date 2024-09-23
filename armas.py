@@ -15,4 +15,4 @@ class Balas:
         self.x += self.direction_x * self.speed
     
     def draw(self):
-        pygame.draw.circle(self.game.screen, 'white', (self.x, self.y), (self.radius))
+        pygame.draw.circle(self.game.screen, 'yellow', (self.x, self.y), (self.radius))
