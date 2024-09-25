@@ -1,5 +1,6 @@
 import pygame
 import math
+from inimigos import *
 
 
 class Varinha:
@@ -44,9 +45,18 @@ class Balas:
         self.direction_x = direction_x
         self.direction_y = direction_y
         
-    def update(self):
+    def update(self, inimigos, pontos):
         self.y += self.direction_y * self.speed
         self.x += self.direction_x * self.speed
+    
+        # Verifica se colidiu com algum inimigo
+        for inimigo in inimigos:
+            if inimigo.vida and inimigo.collision(self):
+                inimigo.vida = False            # Remove o inimigo ao colidir
+                inimigos.remove(inimigo)        # Remove o inimigo do array
+                
+                self.game.pontos += 100
+
     
     def draw(self):
         pygame.draw.circle(self.game.screen, 'white', (self.x, self.y), (self.radius))

@@ -1,7 +1,7 @@
 import pygame
 import sys
 from settings import *
-from mapa import *
+from tela import *
 from jogador import *
 from inimigos import *
 
@@ -16,15 +16,23 @@ class Game:
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
+        self.pontos = 0
+        self.spawn_inimigos()
+    
+    def spawn_inimigos(self):
         self.inimigos = [Inimigo(self) for _ in range(2)]
     
     def update(self):
         # Atualiza a posição do player
         self.player.update()
-
+        
         # Atualiza a posição dos inimigos
-        # for inimigo in self.inimigos:
-        #     inimigo.update()
+        for inimigo in self.inimigos:
+            inimigo.update()
+        
+        if len(self.inimigos) == 0:
+            self.spawn_inimigos()
+        
      
         # Atualiza a tela
         pygame.display.flip()

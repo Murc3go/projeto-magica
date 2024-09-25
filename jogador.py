@@ -1,8 +1,9 @@
 import pygame
 import math
 import time
-from mapa import *
+from tela import *
 from magica import *
+from inimigos import *
 
 
 class Player:
@@ -48,9 +49,9 @@ class Player:
         self.varinha.update()
         
         for bala in self.balas:
-            bala.update()
+            bala.update(self.game.inimigos, self.game.pontos)
         # Remove balas que saíram da tela
-        self.balas = [bala for bala in self.balas if 0 < bala.x < 800 and 0 < bala.y < 600]
+        self.balas = [bala for bala in self.balas if 0 < bala.x < 1280 and 0 < bala.y < 720]
 
     
     def draw(self):
