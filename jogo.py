@@ -21,7 +21,11 @@ class Game:
     def update(self):
         # Atualiza a posição do player
         self.player.update()
-        
+
+        # Atualiza a posição dos inimigos
+        # for inimigo in self.inimigos:
+        #     inimigo.update()
+     
         # Atualiza a tela
         pygame.display.flip()
         self.clock.tick(fps)
@@ -37,13 +41,14 @@ class Game:
         
     def check_events(self):
         
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:  # Detecta clique do mouse
-                if event.button == 1:  # Botão esquerdo do mouse
+              # Detecta clique do mouse
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Botão esquerdo do mouse
+                if event.button == 1:  
                     self.player.shoot()  
         
     def run(self):
