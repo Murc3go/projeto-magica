@@ -2,7 +2,7 @@ import pygame
 import math
 import time
 from mapa import *
-from armas import *
+from magica import *
 
 
 class Player:
@@ -13,8 +13,11 @@ class Player:
         self.speed = 5
         self.radius = 20
         self.balas = []
-        self.taxa_disparo = 2
+        self.taxa_disparo = 1
         self.ult_disparo =  - self.taxa_disparo
+        
+        # Criação da varinha mágica
+        self.varinha = Varinha(game, self, 40)  # A varinha gira a 40px de distância do player
         
     def update(self):
 
@@ -40,6 +43,9 @@ class Player:
             self.y = self.radius
         elif self.y + self.radius > self.game.screen.get_height():
             self.y = self.game.screen.get_height() - self.radius
+            
+        # Atualização da varinha
+        self.varinha.update()
         
         for bala in self.balas:
             bala.update()
@@ -49,6 +55,9 @@ class Player:
     
     def draw(self):
         pygame.draw.circle(self.game.screen, 'blue', (self.x, self.y), (self.radius))
+        
+        # Desenha a varinha
+        self.varinha.draw()
         
         # Desenha as balas
         for bala in self.balas:
@@ -64,9 +73,9 @@ class Player:
             # Obter a posição do mouse
             mouse_x, mouse_y = pygame.mouse.get_pos()
         
-            # Calcular a diferença entre a posição do mouse e do player
-            dx = mouse_x - self.x
-            dy = mouse_y - self.y
+            # Calcular a diferença entre a posição do mouse e da varinha
+            dx = mouse_x - self.varinha.x
+            dy = mouse_y - self.varinha.y
         
             # Normalizar o vetor de direção
             distance = math.sqrt(dx**2 + dy**2)
@@ -74,5 +83,5 @@ class Player:
             direction_y = dy / distance
         
             # Cria uma nova bala na posição do player
-            nova_bala = Balas(self.game, self.x, self.y, direction_x, direction_y)
+            nova_bala = Balas(self.game, self.varinha.x, self.varinha.y, direction_x, direction_y)
             self.balas.append(nova_bala)
