@@ -21,6 +21,9 @@ class Game:
     def update(self):
         # Atualiza a posição do player
         self.player.update()
+        for inimigo in self.inimigos:
+            inimigo.update()
+        
         
         # Atualiza a tela
         pygame.display.flip()
