@@ -28,7 +28,7 @@ class Game:
         
         # Atualiza a posição dos inimigos
         for inimigo in self.inimigos:
-            inimigo.update()
+            inimigo.update(self.player)
         
         if len(self.inimigos) == 0:
             self.spawn_inimigos()

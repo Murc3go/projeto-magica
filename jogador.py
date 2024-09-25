@@ -19,31 +19,42 @@ class Player:
         
         # Criação da varinha mágica
         self.varinha = Varinha(game, self, 40)  # A varinha gira a 40px de distância do player
+
+    def checar_colisao(self, mov_x, mov_y):
+        # Calcula a célula do mapa com base nas coordenadas do jogador
+        grid_x = int(mov_x // 51.2)
+        grid_y = int(mov_y // 51.25)
+
+        # Verifica se a célula é uma parede (1 no mapa)
+        if (grid_x, grid_y) in self.game.map.world_map:
+            return True
+        return False
+
+        
         
     def update(self):
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
         
+        mov_x, mov_y = self.x, self.y
+
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
-            self.x -= self.speed
+            mov_x -= self.speed
         if keys[pygame.K_d]:
-            self.x += self.speed
+            mov_x += self.speed
         if keys[pygame.K_w]:
-            self.y -= self.speed
+            mov_y -= self.speed
         if keys[pygame.K_s]:
-            self.y += self.speed
-            
-        # Mantém o player dentro da tela
-        if self.x - self.radius < 0:
-            self.x = self.radius
-        elif self.x + self.radius > self.game.screen.get_width():
-            self.x = self.game.screen.get_width() - self.radius
-        if self.y - self.radius < 0:
-            self.y = self.radius
-        elif self.y + self.radius > self.game.screen.get_height():
-            self.y = self.game.screen.get_height() - self.radius
+            mov_y += self.speed
+
+        # Verifica a colisão antes de permitir o movimento
+        if not self.checar_colisao(mov_x, self.y):
+            self.x = mov_x
+        if not self.checar_colisao(self.x, mov_y):
+            self.y = mov_y
+
             
         # Atualização da varinha
         self.varinha.update()

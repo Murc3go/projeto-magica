@@ -45,13 +45,13 @@ class Balas:
         self.direction_x = direction_x
         self.direction_y = direction_y
         
-    def update(self, inimigos, pontos):
+    def update(self, inimigos, game):
         self.y += self.direction_y * self.speed
         self.x += self.direction_x * self.speed
     
         # Verifica se colidiu com algum inimigo
         for inimigo in inimigos:
-            if inimigo.vida and inimigo.collision(self):
+            if inimigo.vida and inimigo.acerto_bala(self):
                 inimigo.vida = False            # Remove o inimigo ao colidir
                 inimigos.remove(inimigo)        # Remove o inimigo do array
                 
