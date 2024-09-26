@@ -13,6 +13,7 @@ class Player:
         self.y = 100
         self.speed = 5
         self.radius = 20
+        self.vida = 5
         self.balas = []
         self.taxa_disparo = 1
         self.ult_disparo =  - self.taxa_disparo
@@ -32,7 +33,7 @@ class Player:
 
         
         
-    def update(self):
+    def update(self, inimigos):
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
@@ -54,13 +55,19 @@ class Player:
             self.x = mov_x
         if not self.checar_colisao(self.x, mov_y):
             self.y = mov_y
-
+        
+        for inimigo in inimigos:
+            if inimigo.vida and inimigo.acerto_jogador(self):
+                inimigo.vida = False            # Remove o inimigo ao colidir
+                inimigos.remove(inimigo)        # Remove o inimigo do array
+                
+                self.vida -= 1
             
         # Atualização da varinha
         self.varinha.update()
         
         for bala in self.balas:
-            bala.update(self.game.inimigos, self.game.pontos)
+            bala.update(self.game.inimigos)
         # Remove balas que saíram da tela
         self.balas = [bala for bala in self.balas if 0 < bala.x < 1280 and 0 < bala.y < 720]
 

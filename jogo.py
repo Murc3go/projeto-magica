@@ -12,6 +12,9 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(window_size)
         self.clock = pygame.time.Clock()
+        self.menu = Menu(self.screen)
+        self.menu_game_over = GameOver(self.screen, self)
+        self.game_over = False
         self.new_game()
         
     def new_game(self):
@@ -24,26 +27,30 @@ class Game:
         self.inimigos = [Inimigo(self) for _ in range(2)]
     
     def update(self):
-        # Atualiza a posição do player
-        self.player.update()
+        if not self.game_over:
+            # Atualiza a posição do player
+            self.player.update(self.inimigos)
         
-        # Atualiza a posição dos inimigos
-        for inimigo in self.inimigos:
-            inimigo.update(self.player)
+            # Atualiza a posição dos inimigos
+            for inimigo in self.inimigos:
+                inimigo.update(self.player)
+                if self.player.vida == 0:
+                    self.game_over = True
+                    self.menu_game_over.mostrar_game_over()
         
-        if len(self.inimigos) == 0:
-            self.spawn_inimigos()
+            if len(self.inimigos) == 0:
+                self.spawn_inimigos()
         
      
-        # Atualiza a tela
-        pygame.display.flip()
-        self.clock.tick(fps)
-        pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
+            # Atualiza a tela
+            pygame.display.flip()
+            self.clock.tick(fps)
+            pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
         
     def draw(self):
         self.screen.fill('black')
-        self.map.draw()
+        self.map.draw(self.player)
         self.player.draw()
         for inimigo in self.inimigos:
             inimigo.draw()
@@ -57,16 +64,16 @@ class Game:
               # Detecta clique do mouse
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Botão esquerdo do mouse
-                if event.button == 1:  
+                if event.button == 1 and not self.game_over:  
                     self.player.shoot()  
         
     def run(self):
-        menu = Menu(self.screen)
-        menu.mostrar_menu()
+        self.menu.mostrar_menu()
         while True:
             self.check_events()
-            self.update()
-            self.draw()
+            if not self.game_over:
+                self.update()
+                self.draw()
 if __name__ == '__main__':
     game = Game()
     game.run()

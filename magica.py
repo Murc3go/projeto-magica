@@ -8,6 +8,8 @@ class Varinha:
         self.game = game
         self.player = player # A referência ao jogador
         self.radius = radius # Distância do centro do player
+        self.x = 100
+        self.y = 100
     
     def update(self):
         # Obter a posição do mouse
@@ -45,7 +47,7 @@ class Balas:
         self.direction_x = direction_x
         self.direction_y = direction_y
         
-    def update(self, inimigos, game):
+    def update(self, inimigos):
         self.y += self.direction_y * self.speed
         self.x += self.direction_x * self.speed
     

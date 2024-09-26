@@ -39,6 +39,12 @@ class Inimigo:
         # Verifica se a distância entre o centro da bala e o inimigo é menor ou igual à soma dos raios
         distance = math.sqrt((self.x - bala.x) ** 2 + (self.y - bala.y) ** 2)
         return distance <= self.radius + bala.radius
+    
+    def acerto_jogador(self, jogador):
+        # Verifica se a distância entre o centro do jogodor e o inimigo é menor ou igual à soma dos raios
+        distance = math.sqrt((self.x - jogador.x) ** 2 + (self.y - jogador.y) ** 2)
+        return distance <= self.radius + jogador.radius
+    
     def update(self, jogador):
        if self.vida:
             # Calcula a direção do player
