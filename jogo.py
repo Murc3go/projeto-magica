@@ -4,6 +4,7 @@ from settings import *
 from tela import *
 from jogador import *
 from inimigos import *
+from menu import *
 
 class Game:
     
@@ -60,6 +61,8 @@ class Game:
                     self.player.shoot()  
         
     def run(self):
+        menu = Menu(self.screen)
+        menu.mostrar_menu()
         while True:
             self.check_events()
             self.update()
