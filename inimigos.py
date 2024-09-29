@@ -7,10 +7,10 @@ from jogador import *
 
 
 class Inimigo:
-    def __init__(self, game):
+    def __init__(self, game, inimigo_speed):
         self.game = game
         self.x, self.y = self.spawn_posicao()
-        self.speed = 2
+        self.speed = inimigo_speed
         self.radius = 20
         self.vida = True
 
@@ -32,7 +32,7 @@ class Inimigo:
                 distance_to_player = math.sqrt(jogador_dx ** 2 + jogador_dy ** 2)
 
                 # Verifica se a distância é maior que um limite (50 pixels)
-                if distance_to_player >= 50:
+                if distance_to_player >= 150:
                     return x, y
         
     def acerto_bala(self, bala):

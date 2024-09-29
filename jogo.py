@@ -5,6 +5,7 @@ from tela import *
 from jogador import *
 from inimigos import *
 from menu import *
+from dificuldade import *
 
 class Game:
     
@@ -21,25 +22,32 @@ class Game:
         self.map = Map(self)
         self.player = Player(self)
         self.pontos = 0
-        self.spawn_inimigos()
+        self.num_inimigos = 2
+        self.inimigo_speed = 2
+        self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
+        self.dificuldade = Dificuldade(self, self.inimigos)
+        
     
     def spawn_inimigos(self):
-        self.inimigos = [Inimigo(self) for _ in range(2)]
-    
+        self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
+        self.dificuldade.subindo_dificuldade()   
     def update(self):
         if not self.game_over:
+
             # Atualiza a posição do player
             self.player.update(self.inimigos)
         
             # Atualiza a posição dos inimigos
             for inimigo in self.inimigos:
                 inimigo.update(self.player)
+
                 if self.player.vida == 0:
                     self.game_over = True
                     self.menu_game_over.mostrar_game_over()
         
             if len(self.inimigos) == 0:
                 self.spawn_inimigos()
+
         
      
             # Atualiza a tela

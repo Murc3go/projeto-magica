@@ -1,6 +1,5 @@
 import pygame
 import math
-from inimigos import *
 
 
 class Varinha:
@@ -42,7 +41,7 @@ class Balas:
         self.game = game
         self.x = x
         self.y = y
-        self.speed = 10
+        self.speed = 15
         self.radius = 5
         self.direction_x = direction_x
         self.direction_y = direction_y
