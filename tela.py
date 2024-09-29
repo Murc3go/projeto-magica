@@ -1,6 +1,5 @@
 import pygame
-from settings import *
-from jogador import Player
+# from settings import *
 
 
 
@@ -52,8 +51,10 @@ class Map:
                 
 
         # Renderiza a pontuação e vida e a exibe na tela
-        pontos_tela = self.font.render((self.pontos_string + str(self.game.pontos)), True, ('white'))
-        vida_tela = self.font.render((self.vida_string + str(jogador.vida)), True, ('white'))
-        self.game.screen.blit(vida_tela, (307.5, 680))
-        self.game.screen.blit(pontos_tela, (51.25, 680))
-                
+        hud_jogador = self.font.render((self.pontos_string + str(self.game.pontos) + "     " + self.vida_string + str(jogador.vida)), True, ('white'))
+        # vida_tela = self.font.render((self.vida_string + str(jogador.vida)), True, ('white'))
+
+        screen_width = self.game.screen.get_width()
+        cent_hud = (screen_width - hud_jogador.get_width()) / 2
+
+        self.game.screen.blit(hud_jogador,( (cent_hud, 680)))        
