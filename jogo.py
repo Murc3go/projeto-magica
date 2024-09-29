@@ -1,9 +1,11 @@
 import pygame
 import sys
 from settings import *
-from mapa import *
+from tela import *
 from jogador import *
 from inimigos import *
+from menu import *
+from dificuldade import *
 
 class Game:
     
@@ -11,46 +13,75 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(window_size)
         self.clock = pygame.time.Clock()
+        self.menu = Menu(self.screen)
+        self.menu_game_over = GameOver(self.screen, self)
+        self.game_over = False
         self.new_game()
         
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
-        self.inimigos = [Inimigo(self) for _ in range(2)]
-    
-    def update(self):
-        # Atualiza a posição do player
-        self.player.update()
+        self.pontos = 0
+        self.num_inimigos = 2
+        self.inimigo_speed = 2
+        self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
+        self.dificuldade = Dificuldade(self, self.inimigos)
         
-        # Atualiza a tela
-        pygame.display.flip()
-        self.clock.tick(fps)
-        pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
+    
+    def spawn_inimigos(self):
+        self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
+        self.dificuldade.subindo_dificuldade()   
+    def update(self):
+        if not self.game_over:
+
+            # Atualiza a posição do player
+            self.player.update(self.inimigos)
+        
+            # Atualiza a posição dos inimigos
+            for inimigo in self.inimigos:
+                inimigo.update(self.player)
+
+                if self.player.vida == 0:
+                    self.game_over = True
+                    self.menu_game_over.mostrar_game_over()
+        
+            if len(self.inimigos) == 0:
+                self.spawn_inimigos()
+
+        
+     
+            # Atualiza a tela
+            pygame.display.flip()
+            self.clock.tick(fps)
+            pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
         
     def draw(self):
         self.screen.fill('black')
-        self.map.draw()
+        self.map.draw(self.player)
         self.player.draw()
         for inimigo in self.inimigos:
             inimigo.draw()
         
     def check_events(self):
         
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:  # Detecta clique do mouse
-                if event.button == 1:  # Botão esquerdo do mouse
+              # Detecta clique do mouse
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Botão esquerdo do mouse
+                if event.button == 1 and not self.game_over:  
                     self.player.shoot()  
         
     def run(self):
+        self.menu.mostrar_menu()
         while True:
             self.check_events()
-            self.update()
-            self.draw()
+            if not self.game_over:
+                self.update()
+                self.draw()
 if __name__ == '__main__':
     game = Game()
     game.run()
