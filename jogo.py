@@ -49,19 +49,12 @@ class Game:
                     self.menu_game_over.mostrar_game_over()
         
             if len(self.inimigos) == 0:
-                self.spawn_inimigos()
-
-
-        
+                self.spawn_inimigos()       
      
             # Atualiza a tela
             pygame.display.flip()
             self.clock.tick(fps)
             pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
-
-            return True  # Indica que a tela deve ser desenhada
-
-        return False 
         
         
     def draw(self):
@@ -88,9 +81,8 @@ class Game:
         self.menu.mostrar_menu()
         while True:
             self.check_events()
-            # if not self.game_over:
-            should_draw = self.update()  # Chama update e armazena o resultado
-            if should_draw:
+            if not self.game_over:
+                self.update() 
                 self.draw()
 
 if __name__ == '__main__':

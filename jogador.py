@@ -1,8 +1,6 @@
 import pygame
 import math
-from tela import *
 from magica import *
-from inimigos import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -14,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         self.radius = 40
         self.vida = 5
         self.balas = []
-        self.taxa_disparo = 100
+        self.taxa_disparo = 950
         self.ult_disparo =  - self.taxa_disparo
         
         
@@ -55,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         for bala in self.balas:
             bala.update(self.game.inimigos)
         # Remove balas que saíram da tela
-        self.balas = [bala for bala in self.balas if 0 < bala.x < 1280 and 0 < bala.y < 720]
+        self.balas = [bala for bala in self.balas if 0 < bala.x < 1366 and 0 < bala.y < 768]
 
     
     def draw(self):
