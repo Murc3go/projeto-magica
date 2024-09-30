@@ -1,9 +1,6 @@
 import pygame
 import random
 import math
-from tela import *
-from magica import *
-from jogador import *
 
 
 class Inimigo:
@@ -25,7 +22,7 @@ class Inimigo:
             grid_y = int(y // 51.25)
 
             # Verifica se a posição no mapa não é uma barreira (células com 1)
-            if (grid_x, grid_y) not in self.game.map.world_map:
+            if (grid_x, grid_y) not in self.game.map.map_layout:
                 # Verifica a distância do jogador
                 jogador_dx = x - self.game.player.x
                 jogador_dy = y - self.game.player.y

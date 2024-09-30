@@ -17,7 +17,9 @@ class Game:
         self.menu_game_over = GameOver(self.screen, self)
         self.game_over = False
         self.new_game()
-        
+
+              
+
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
@@ -26,6 +28,7 @@ class Game:
         self.inimigo_speed = 2
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
         self.dificuldade = Dificuldade(self, self.inimigos)
+
         
     
     def spawn_inimigos(self):
@@ -48,17 +51,23 @@ class Game:
             if len(self.inimigos) == 0:
                 self.spawn_inimigos()
 
+
         
      
             # Atualiza a tela
             pygame.display.flip()
             self.clock.tick(fps)
             pygame.display.set_caption(f'{self.clock.get_fps() :.1f}')
+
+            return True  # Indica que a tela deve ser desenhada
+
+        return False 
         
         
     def draw(self):
-        self.screen.fill('black')
+
         self.map.draw(self.player)
+
         self.player.draw()
         for inimigo in self.inimigos:
             inimigo.draw()
@@ -79,9 +88,11 @@ class Game:
         self.menu.mostrar_menu()
         while True:
             self.check_events()
-            if not self.game_over:
-                self.update()
+            # if not self.game_over:
+            should_draw = self.update()  # Chama update e armazena o resultado
+            if should_draw:
                 self.draw()
+
 if __name__ == '__main__':
     game = Game()
     game.run()

@@ -1,35 +1,25 @@
 import pygame
 import math
-import time
 from tela import *
 from magica import *
 from inimigos import *
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self, game):
         self.game = game
         self.x = 100
         self.y = 100
         self.speed = 5
-        self.radius = 20
+        self.radius = 40
         self.vida = 5
         self.balas = []
-        self.taxa_disparo = 1
+        self.taxa_disparo = 100
         self.ult_disparo =  - self.taxa_disparo
+        
         
         # Criação da varinha mágica
         self.varinha = Varinha(game, self, 40)  # A varinha gira a 40px de distância do player
-
-    def checar_colisao(self, mov_x, mov_y):
-        # Calcula a célula do mapa com base nas coordenadas do jogador
-        grid_x = int(mov_x // 51.2)
-        grid_y = int(mov_y // 51.25)
-
-        # Verifica se a célula é uma parede (1 no mapa)
-        if (grid_x, grid_y) in self.game.map.world_map:
-            return True
-        return False
 
         
         
@@ -38,30 +28,26 @@ class Player:
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
         
-        mov_x, mov_y = self.x, self.y
 
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
-            mov_x -= self.speed
+            self.x -= self.speed
         if keys[pygame.K_d]:
-            mov_x += self.speed
+            self.x += self.speed
         if keys[pygame.K_w]:
-            mov_y -= self.speed
+            self.y -= self.speed
         if keys[pygame.K_s]:
-            mov_y += self.speed
+            self.y += self.speed
 
-        # Verifica a colisão antes de permitir o movimento
-        if not self.checar_colisao(mov_x, self.y):
-            self.x = mov_x
-        if not self.checar_colisao(self.x, mov_y):
-            self.y = mov_y
         
+        inimigos_a_remover = []
         for inimigo in inimigos:
             if inimigo.vida and inimigo.acerto_jogador(self):
-                inimigo.vida = False            # Remove o inimigo ao colidir
-                inimigos.remove(inimigo)        # Remove o inimigo do array
-                
+                inimigos_a_remover.append(inimigo)
                 self.vida -= 1
+
+        for inimigo in inimigos_a_remover:
+            inimigos.remove(inimigo)
             
         # Atualização da varinha
         self.varinha.update()
@@ -84,11 +70,10 @@ class Player:
 
     def shoot(self):
         # Verifica se o tempo desde o último disparo é maior ou igual à taxa de disparo
-        tempo_atual = time.time()
 
-        if tempo_atual - self.ult_disparo >= self.taxa_disparo:
+        if pygame.time.get_ticks() >= self.ult_disparo:
             # Atualiza o tempo do último disparo
-            self.ult_disparo = tempo_atual
+            self.ult_disparo += self.taxa_disparo
             # Obter a posição do mouse
             mouse_x, mouse_y = pygame.mouse.get_pos()
         
