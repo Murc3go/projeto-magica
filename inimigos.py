@@ -7,22 +7,49 @@ from spritesheet import Spritesheet
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, game, inimigo_speed):
         pygame.sprite.Sprite.__init__(self)
-        self.spritesheet = pygame.image.load('Sprites/Personagens/Skull.png').convert_alpha()
-        self.width = 16
-        self.height = 16
-        
-        # Criando uma superfície para a imagem do inimigo
-        self.image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
-        self.image.blit(self.spritesheet, (0, 0), (0, 0, self.width, self.height))  # Carrega uma parte do spritesheet
-        # pygame.transform.scale(pygame.image.load('Sprites/Painel/painel3.png'), (self.tile_size, self.tile_size))
-        # Define o retângulo do sprite
-        self.rect = self.image.get_rect()
-        
+        self.spritesheet = pygame.image.load('Sprites/Personagens/Skull.png').convert_alpha()    
         self.game = game
         self.x, self.y = self.spawn_posicao()
         self.speed = inimigo_speed
         self.radius = 20
         self.vida = True
+        self.tamanho = 40
+        self.sprite_width = 16
+        self.sprite_height = 16
+        self.num_frames = 16
+        self.frames = []
+
+        
+        for row in range(4):  # 4 linhas de frames
+            for col in range(4):  # 4 colunas de frames
+                if row == 0 and col == 0:
+                    # Calculando a posição de cada frame
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    frame = self.spritesheet.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    frame = pygame.transform.scale(frame, (self.tamanho, self.tamanho))
+                    self.frames.append(frame)
+                elif row == 1 and col == 0:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    frame = self.spritesheet.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    frame = pygame.transform.scale(frame, (self.tamanho, self.tamanho))
+                    self.frames.append(frame)
+                elif row == 2 and col == 0:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    frame = self.spritesheet.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    frame = pygame.transform.scale(frame, (self.tamanho, self.tamanho))
+                    self.frames.append(frame)
+                elif row == 3 and col == 0:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    frame = self.spritesheet.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    frame = pygame.transform.scale(frame, (self.tamanho, self.tamanho))
+                    self.frames.append(frame)
+                
+        self.image = self.frames[0]
+        self.rect = self.image.get_rect()   
         self.rect.topleft = (self.x, self.y)
 
     def spawn_posicao(self):
@@ -50,12 +77,12 @@ class Inimigo(pygame.sprite.Sprite):
     def acerto_bala(self, bala):
         # Verifica se a distância entre o centro da bala e o inimigo é menor ou igual à soma dos raios
         distance = math.sqrt((self.x - bala.x) ** 2 + (self.y - bala.y) ** 2)
-        return distance <= self.radius + bala.radius
+        return distance <= self.tamanho + bala.radius
     
     def acerto_jogador(self, jogador):
         # Verifica se a distância entre o centro do jogodor e o inimigo é menor ou igual à soma dos raios
         distance = math.sqrt((self.x - jogador.x) ** 2 + (self.y - jogador.y) ** 2)
-        return distance <= self.radius + jogador.radius
+        return distance <= self.tamanho + jogador.radius
     
     def update(self, jogador):
        if self.vida:
@@ -79,4 +106,4 @@ class Inimigo(pygame.sprite.Sprite):
     def draw(self):
         if self.vida:
             # pygame.draw.circle(self.game.screen, 'red', (self.x, self.y), (self.radius))
-            self.game.screen.blit(self.image, (self.rect.x, self.rect.y)) 
+            self.game.screen.blit(self.frames[self.game.current_frame // self.game.frame_rate], (self.rect.x, self.rect.y)) 

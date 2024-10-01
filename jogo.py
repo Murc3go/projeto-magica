@@ -16,6 +16,8 @@ class Game:
         self.menu = Menu(self.screen)
         self.menu_game_over = GameOver(self.screen, self)
         self.game_over = False
+        self.current_frame = 0
+        self.frame_rate = 10
         self.new_game()
 
               
@@ -76,6 +78,11 @@ class Game:
                 # Botão esquerdo do mouse
                 if event.button == 1 and not self.game_over:  
                     self.player.shoot()  
+        
+        self.current_frame += 1
+        for inimigo in self.inimigos:
+            if self.current_frame >= len(inimigo.frames) * self.frame_rate:
+                self.current_frame = 0
         
     def run(self):
         self.menu.mostrar_menu()
