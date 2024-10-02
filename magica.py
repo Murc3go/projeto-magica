@@ -3,10 +3,11 @@ import math
 
 
 class Varinha:
-    def __init__(self, game, player, radius):
+    def __init__(self, game, player):
         self.game = game
         self.player = player # A referência ao jogador
-        self.radius = radius # Distância do centro do player
+        self.tamanho = 60
+        self.radius = 30 # Distância do centro do player
         self.x = 100
         self.y = 100
     
@@ -14,9 +15,12 @@ class Varinha:
         # Obter a posição do mouse
         mouse_x, mouse_y = pygame.mouse.get_pos()
         
-        # Calcular a direção do mouse em relação ao jogador
-        dx = mouse_x - self.player.x
-        dy = mouse_y - self.player.y
+        # Calcular a direção do mouse em relação ao centro do quadrado do jogador
+        player_center_x = self.player.x + self.tamanho // 2  # Centro do quadrado
+        player_center_y = self.player.y + self.tamanho // 2  # Centro do quadrado
+        
+        dx = mouse_x - player_center_x
+        dy = mouse_y - player_center_y
 
         # Normalizar o vetor de direção (fazer o vetor ter comprimento 1)
         distance = math.sqrt(dx**2 + dy**2)
@@ -28,8 +32,8 @@ class Varinha:
             direction_y = 0
         
         # Posicionar a varinha a uma distância fixa (self.radius) ao redor do jogador
-        self.x = self.player.x + direction_x * self.radius
-        self.y = self.player.y + direction_y * self.radius
+        self.x = player_center_x + direction_x * (self.radius + self.tamanho // 2) 
+        self.y = player_center_y + direction_y * (self.radius  + self.tamanho // 2)
     
     def draw(self):
        # Desenhar a varinha na posição calculada
