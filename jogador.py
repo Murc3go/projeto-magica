@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
         self.radius = 30
         self.vida = 5
-        self.balas = []
+        self.projetil = []
         self.taxa_disparo = 0.95
         self.ult_disparo =  time.time()
         self.atirando = False
@@ -152,16 +152,46 @@ class Player(pygame.sprite.Sprite):
         self.rect_cima = self.cima_image.get_rect()   
         self.rect_baixo = self.baixo_image.get_rect()   
         self.rect_esquerda = self.esquerda_image.get_rect()   
-        self.rect_direita = self.direita_image.get_rect()   
-        # self.rect.topleft = (self.x, self.y)
-        
-        
-        # Criação da varinha mágica
-        self.varinha = Varinha(game, self)
+        self.rect_direita = self.direita_image.get_rect()
+    
+    def update_direction(self):
+        # Pega a posição do mouse
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        # Calcula o centro do jogador
+        centro_x = self.x + self.tamanho // 2
+        centro_y = self.y + self.tamanho // 2
+
+        # Calcula a diferença entre o mouse e o jogador
+        delta_x = mouse_x - centro_x
+        delta_y = mouse_y - centro_y
+
+        # Calcula o ângulo em radianos
+        angulo = math.atan2(delta_y, delta_x)
+
+        # Converte o ângulo de radianos para graus
+        angulo_graus = math.degrees(angulo)
+
+        # Determina a direção com base no ângulo
+        if -45 <= angulo_graus < 45:
+            self.direcao_atual = "direita"
+            self.rect_direita.topleft = (self.x, self.y)
+        elif 45 <= angulo_graus < 135:
+            self.direcao_atual = "baixo"
+            self.rect_baixo.topleft = (self.x, self.y)
+        elif -135 <= angulo_graus < -45:
+            self.direcao_atual = "cima"
+            self.rect_cima.topleft = (self.x, self.y)
+        else:
+            self.direcao_atual = "esquerda"
+            self.rect_esquerda.topleft = (self.x, self.y)   
 
         
         
     def update(self, inimigos):
+        
+        self.update_direction()
+
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
@@ -170,20 +200,20 @@ class Player(pygame.sprite.Sprite):
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
             self.x -= self.speed
-            self.direcao_atual = "esquerda"  # Atualiza a direção para esquerda
-            self.rect_esquerda.topleft = (self.x, self.y)
+            # self.direcao_atual = "esquerda"  # Atualiza a direção para esquerda
+            # self.rect_esquerda.topleft = (self.x, self.y)
         if keys[pygame.K_d]:
             self.x += self.speed
-            self.direcao_atual = "direita"  # Atualiza a direção para direita
-            self.rect_direita.topleft = (self.x, self.y)
+            # self.direcao_atual = "direita"  # Atualiza a direção para direita
+            # self.rect_direita.topleft = (self.x, self.y)
         if keys[pygame.K_w]:
             self.y -= self.speed
-            self.direcao_atual = "cima"  # Atualiza a direção para cima
-            self.rect_cima.topleft = (self.x, self.y)
+            # self.direcao_atual = "cima"  # Atualiza a direção para cima
+            # self.rect_cima.topleft = (self.x, self.y)
         if keys[pygame.K_s]:
             self.y += self.speed
-            self.direcao_atual = "baixo"  # Atualiza a direção para baixo
-            self.rect_baixo.topleft = (self.x, self.y)
+            # self.direcao_atual = "baixo"  # Atualiza a direção para baixo
+            # self.rect_baixo.topleft = (self.x, self.y)
 
         
         inimigos_a_remover = []
@@ -194,17 +224,13 @@ class Player(pygame.sprite.Sprite):
 
         for inimigo in inimigos_a_remover:
             inimigos.remove(inimigo)
-            
-        # Atualização da varinha
-        self.varinha.update()
+                    
         
-        for bala in self.balas:
-            bala.update(self.game.inimigos)
+        for projetil in self.projetil:
+            projetil.update(self.game.inimigos)
+            
         # Remove balas que saíram da tela
-        self.balas = [bala for bala in self.balas if 0 < bala.x < 1366 and 0 < bala.y < 768]
-        # Permitir disparar novamente se o tempo desde o último disparo for maior que a taxa de disparo
-        if time.time() >= self.ult_disparo:
-            self.is_shooting = False
+        self.projetil = [projetil for projetil in self.projetil if 0 < projetil.x < 1366 and 0 < projetil.y < 768]
 
     
     def draw(self):
@@ -219,32 +245,26 @@ class Player(pygame.sprite.Sprite):
         elif self.direcao_atual == "direita":
             self.game.screen.blit(self.direita_frames[self.game.current_frame // self.game.frame_rate], (self.rect_direita.x, self.rect_direita.y))
         
-        # Desenha a varinha
-        self.varinha.draw()
         
-        # Desenha as balas
-        for bala in self.balas:
-            bala.draw()
+       
+        for projetil in self.projetil:
+            projetil.draw()
 
     def shoot(self):
         # Verifica se o tempo desde o último disparo é maior ou igual à taxa de disparo
-
-        if time.time() >= self.ult_disparo and not self.atirando:
-            self.atirando = True
+        if time.time() - self.ult_disparo >= self.taxa_disparo:
             # Atualiza o tempo do último disparo
-            self.ult_disparo = time.time() + self.taxa_disparo
-            # Obter a posição do mouse
+            self.ult_disparo = time.time()
+        
+        
+            # Obtém a posição atual do mouse
             mouse_x, mouse_y = pygame.mouse.get_pos()
-        
-            # Calcular a diferença entre a posição do mouse e da varinha
-            dx = mouse_x - self.varinha.x
-            dy = mouse_y - self.varinha.y
-        
-            # Normalizar o vetor de direção
-            distance = math.sqrt(dx**2 + dy**2)
-            direction_x = dx / distance
-            direction_y = dy / distance
-        
-            # Cria uma nova bala na posição do player
-            nova_bala = Balas(self.game, self.varinha.x, self.varinha.y, direction_x, direction_y)
-            self.balas.append(nova_bala)
+            
+            
+            # Calcula o centro do player
+            self.centro_x = self.x + self.tamanho // 2
+            self.centro_y = self.y + self.tamanho // 2
+
+            # Cria um novo projétil na posição do player que vai em direção ao mouse
+            novo_projetil = Magica(self.game, self.centro_x, self.centro_y, mouse_x, mouse_y)
+            self.projetil.append(novo_projetil)
