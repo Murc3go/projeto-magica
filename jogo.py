@@ -16,8 +16,12 @@ class Game:
         self.menu = Menu(self.screen)
         self.menu_game_over = GameOver(self.screen, self)
         self.game_over = False
+        self.current_frame = 0
+        self.frame_rate = 10
         self.new_game()
-        
+
+              
+
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
@@ -26,6 +30,7 @@ class Game:
         self.inimigo_speed = 2
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
         self.dificuldade = Dificuldade(self, self.inimigos)
+
         
     
     def spawn_inimigos(self):
@@ -47,8 +52,13 @@ class Game:
         
             if len(self.inimigos) == 0:
                 self.spawn_inimigos()
-
-        
+            
+            if self.player.aura_start:    
+                self.player.aura_current += 1
+            if self.player.aura_current >= len(self.player.aura_frames) * self.frame_rate:
+                self.player.aura_current = 0
+                self.player.aura_start = False
+                self.player.shoot()         
      
             # Atualiza a tela
             pygame.display.flip()
@@ -57,8 +67,9 @@ class Game:
         
         
     def draw(self):
-        self.screen.fill('black')
+
         self.map.draw(self.player)
+
         self.player.draw()
         for inimigo in self.inimigos:
             inimigo.draw()
@@ -72,16 +83,24 @@ class Game:
               # Detecta clique do mouse
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Botão esquerdo do mouse
-                if event.button == 1 and not self.game_over:  
-                    self.player.shoot()  
+                if event.button == 1 and not self.game_over:
+                    self.player.aura_start = True
+
+        
+        self.current_frame += 1
+
+        for inimigo in self.inimigos:
+            if self.current_frame >= len(inimigo.frames) * self.frame_rate:
+                self.current_frame = 0
         
     def run(self):
         self.menu.mostrar_menu()
         while True:
             self.check_events()
             if not self.game_over:
-                self.update()
+                self.update() 
                 self.draw()
+
 if __name__ == '__main__':
     game = Game()
     game.run()

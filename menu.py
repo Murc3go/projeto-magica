@@ -1,5 +1,4 @@
 import pygame
-from settings import *
 
 
 class Menu:
@@ -27,6 +26,7 @@ class Menu:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:  # Começar o jogo
                         self.menu_ativo = False
+   
                     if event.key == pygame.K_e:  # Sair do jogo
                         pygame.quit()
                         exit()
