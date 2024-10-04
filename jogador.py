@@ -9,6 +9,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.spritesheet_mov = pygame.image.load('Sprites/Personagens/Player/jogador_mov.png').convert_alpha() 
         self.spritesheet_par = pygame.image.load('Sprites/Personagens/Player/jogador_par.png').convert_alpha() 
+        self.spritesheet_aura = pygame.image.load('Sprites/FX/Aura.png').convert_alpha() 
         self.game = game
         self.x = 100
         self.y = 100
@@ -17,18 +18,98 @@ class Player(pygame.sprite.Sprite):
         self.vida = 5
         self.projetil = []
         self.taxa_disparo = 0.95
-        self.ult_disparo =  time.time()
+        self.ult_disparo =  - self.taxa_disparo
         self.atirando = False
         self.tamanho = 60
         self.sprite_width = 16
         self.sprite_height = 16
-        self.num_frames = 16
+        self.aura_width = 32
+        self.aura_height = 32
+        self.aura_tamanho = 100
+        self.aura_start = False
         self.direcao_atual = "baixo"
+        self.movimentacao = False
+        self.aura_current = 0
+        self.aura_frames = []
         self.cima_frames = []
         self.baixo_frames = []
         self.esquerda_frames = []
         self.direita_frames = []
+        self.parado_baixo = None
+        self.parado_cima = None
+        self.parado_esquerda = None
+        self.parado_direita = None
         
+        #SPRITE AURA
+        for row in range(1):  # 0 linhas de frames
+            for col in range(4):  # 4 colunas de frames
+                if row == 0 and col == 0:
+                    # Calculando a posição de cada frame
+                    frame_x = col * self.aura_width
+                    frame_y = row * self.aura_height
+                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
+                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
+                    self.aura_frames.append(aura_frame)
+                elif row == 0 and col == 1:
+                    frame_x = col * self.aura_width
+                    frame_y = row * self.aura_height
+                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
+                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
+                    self.aura_frames.append(aura_frame)
+                elif row == 0 and col == 2:
+                    frame_x = col * self.aura_width
+                    frame_y = row * self.aura_height
+                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
+                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
+                    self.aura_frames.append(aura_frame)
+                elif row == 0 and col == 3:
+                    frame_x = col * self.aura_width
+                    frame_y = row * self.aura_height
+                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
+                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
+                    self.aura_frames.append(aura_frame)
+                    
+        self.aura_img = self.aura_frames[0]
+        self.rect_aura = self.aura_img.get_rect()   
+        
+        #SPRITE PARADO
+        for row in range(1):  # 0 linhas de frames
+            for col in range(4):  # 4 colunas de frames
+                if row == 0 and col == 0:
+                    # Calculando a posição de cada frame
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    self.parado_baixo = self.spritesheet_mov.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    self.parado_baixo = pygame.transform.scale(self.parado_baixo, (self.tamanho, self.tamanho))
+                elif row == 0 and col == 1:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    self.parado_cima = self.spritesheet_mov.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    self.parado_cima = pygame.transform.scale(self.parado_cima, (self.tamanho, self.tamanho))
+                elif row == 0 and col == 2:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    self.parado_esquerda = self.spritesheet_mov.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    self.parado_esquerda = pygame.transform.scale(self.parado_esquerda, (self.tamanho, self.tamanho))
+                elif row == 0 and col == 3:
+                    frame_x = col * self.sprite_width
+                    frame_y = row * self.sprite_height
+                    self.parado_direita = self.spritesheet_mov.subsurface((frame_x, frame_y, self.sprite_width, self.sprite_height))
+                    self.parado_direita = pygame.transform.scale(self.parado_direita, (self.tamanho, self.tamanho))
+        
+        self.par_cima_img = self.parado_cima
+        self.par_baixo_img = self.parado_baixo
+        self.par_esq_img = self.parado_esquerda
+        self.par_dir_img = self.parado_direita 
+        if self.par_cima_img:
+            self.rect_par_cima = self.par_cima_img.get_rect()
+        if self.par_baixo_img:
+            self.rect_par_baixo = self.par_baixo_img.get_rect()
+        if self.par_esq_img:
+            self.rect_par_esq = self.par_esq_img.get_rect()
+        if self.par_dir_img:
+            self.rect_par_dir = self.par_dir_img.get_rect()    
+                    
         #SPRITE DE ANDAR PARA BAIXO
         for row in range(4):  # 4 linhas de frames
             for col in range(4):  # 4 colunas de frames
@@ -191,29 +272,42 @@ class Player(pygame.sprite.Sprite):
     def update(self, inimigos):
         
         self.update_direction()
-
+            
+        self.movimentacao = False
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
+        
+        self.rect_aura.topleft = (self.x - 20, self.y - 5)
+
+        
+        
         
 
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
             self.x -= self.speed
-            # self.direcao_atual = "esquerda"  # Atualiza a direção para esquerda
-            # self.rect_esquerda.topleft = (self.x, self.y)
+            self.movimentacao = True
         if keys[pygame.K_d]:
             self.x += self.speed
-            # self.direcao_atual = "direita"  # Atualiza a direção para direita
-            # self.rect_direita.topleft = (self.x, self.y)
+            self.movimentacao = True
         if keys[pygame.K_w]:
             self.y -= self.speed
-            # self.direcao_atual = "cima"  # Atualiza a direção para cima
-            # self.rect_cima.topleft = (self.x, self.y)
+            self.movimentacao = True
         if keys[pygame.K_s]:
             self.y += self.speed
-            # self.direcao_atual = "baixo"  # Atualiza a direção para baixo
-            # self.rect_baixo.topleft = (self.x, self.y)
+            self.movimentacao = True
+
+        # Atualiza a posição do sprite de parado quando não está se movendo
+        if not self.movimentacao:
+            if self.direcao_atual == "esquerda":
+                self.rect_par_esq.topleft = (self.x, self.y)
+            elif self.direcao_atual == "direita":
+                self.rect_par_dir.topleft = (self.x, self.y)
+            elif self.direcao_atual == "cima":
+                self.rect_par_cima.topleft = (self.x, self.y)
+            elif self.direcao_atual == "baixo":
+                self.rect_par_baixo.topleft = (self.x, self.y)
 
         
         inimigos_a_remover = []
@@ -231,30 +325,48 @@ class Player(pygame.sprite.Sprite):
             
         # Remove balas que saíram da tela
         self.projetil = [projetil for projetil in self.projetil if 0 < projetil.x < 1366 and 0 < projetil.y < 768]
+        
 
     
     def draw(self):
         # pygame.draw.circle(self.game.screen, 'blue', (self.x, self.y), (self.radius))
-
-        if self.direcao_atual == "cima":
-            self.game.screen.blit(self.cima_frames[self.game.current_frame // self.game.frame_rate], (self.rect_cima.x, self.rect_cima.y))
-        elif self.direcao_atual == "baixo":
-            self.game.screen.blit(self.baixo_frames[self.game.current_frame // self.game.frame_rate], (self.rect_baixo.x, self.rect_baixo.y))
-        elif self.direcao_atual == "esquerda":
-            self.game.screen.blit(self.esquerda_frames[self.game.current_frame // self.game.frame_rate], (self.rect_esquerda.x, self.rect_esquerda.y))
-        elif self.direcao_atual == "direita":
-            self.game.screen.blit(self.direita_frames[self.game.current_frame // self.game.frame_rate], (self.rect_direita.x, self.rect_direita.y))
         
-        
-       
+        # Renderiza o sprite parado dependendo da direção
+        if self.movimentacao:
+            if self.direcao_atual == "cima":
+                self.game.screen.blit(self.cima_frames[self.game.current_frame // self.game.frame_rate], (self.rect_cima.x, self.rect_cima.y))
+            elif self.direcao_atual == "baixo":
+                self.game.screen.blit(self.baixo_frames[self.game.current_frame // self.game.frame_rate], (self.rect_baixo.x, self.rect_baixo.y))
+            elif self.direcao_atual == "esquerda":
+                self.game.screen.blit(self.esquerda_frames[self.game.current_frame // self.game.frame_rate], (self.rect_esquerda.x, self.rect_esquerda.y))
+            elif self.direcao_atual == "direita":
+                self.game.screen.blit(self.direita_frames[self.game.current_frame // self.game.frame_rate], (self.rect_direita.x, self.rect_direita.y))
+        else:
+            
+            if self.direcao_atual == "cima":
+                self.game.screen.blit(self.parado_cima, (self.rect_par_cima.x, self.rect_par_cima.y))
+            elif self.direcao_atual == "baixo":
+                self.game.screen.blit(self.parado_baixo, (self.rect_par_baixo.x, self.rect_par_baixo.y))
+            elif self.direcao_atual == "esquerda":
+                self.game.screen.blit(self.parado_esquerda, (self.rect_par_esq.x, self.rect_par_esq.y))
+            elif self.direcao_atual == "direita":
+                self.game.screen.blit(self.parado_direita, (self.rect_par_dir.x, self.rect_par_dir.y))
+                
+        if self.aura_start:
+            # if self.aura_current >= len(self.aura_frames) * self.game.frame_rate:
+            #     self.aura_start = False
+            # else:
+                self.game.screen.blit(self.aura_frames[self.aura_current // self.game.frame_rate ], (self.x, self.y))  # Supondo que x e y são as coordenadas do jogador
         for projetil in self.projetil:
+            
             projetil.draw()
 
     def shoot(self):
-        # Verifica se o tempo desde o último disparo é maior ou igual à taxa de disparo
-        if time.time() - self.ult_disparo >= self.taxa_disparo:
-            # Atualiza o tempo do último disparo
-            self.ult_disparo = time.time()
+        agora = time.time()
+        
+        if agora - self.ult_disparo >= self.taxa_disparo:
+            self.atirando = True
+            self.ult_disparo = agora  # Atualiza o último disparo
         
         
             # Obtém a posição atual do mouse

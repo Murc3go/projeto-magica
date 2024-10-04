@@ -7,7 +7,7 @@ from spritesheet import Spritesheet
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, game, inimigo_speed):
         pygame.sprite.Sprite.__init__(self)
-        self.spritesheet = pygame.image.load('Sprites/Personagens/Skull.png').convert_alpha()    
+        self.spritesheet = pygame.image.load('Sprites/Personagens/Inimigos/Skull.png').convert_alpha()    
         self.game = game
         self.x, self.y = self.spawn_posicao()
         self.speed = inimigo_speed
