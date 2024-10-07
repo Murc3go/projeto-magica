@@ -7,44 +7,46 @@ class Map(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.tile_size_wd = 32 # Tamanho do quadrado
         self.tile_size_ht = 32 # Tamanho do quadrado
-        self.grass_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/grass4.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_esq_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra01.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_esq_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra11.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_dir_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra03.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_dir_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra13.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra02.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra12.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_esq_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra06.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.bar_dir_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra08.png'), (self.tile_size_wd, self.tile_size_ht))
-        self.chao_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/l0_textura_terra07.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.cerca_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Cenario/cerca.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.grass_chao_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono10.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.grass_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Cenario/grass4.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_esq_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono01.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_esq_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono02.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_dir_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono03.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_dir_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono04.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_sup_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono05.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_inf_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono06.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_esq_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono07.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.bar_dir_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono08.png'), (self.tile_size_wd, self.tile_size_ht))
+        self.chao_sprite = pygame.transform.scale(pygame.image.load('Sprites/Tileset/Outono/outono09.png'), (self.tile_size_wd, self.tile_size_ht))
         self.hud_sprite = pygame.transform.scale(pygame.image.load('Sprites/Painel/painel3.png'), (self.tile_size_wd, self.tile_size_ht))
         self.hud_esq_sprite = pygame.transform.scale(pygame.image.load('Sprites/Painel/painel1.png'), (self.tile_size_wd, self.tile_size_ht))
         self.hud_dir_sprite = pygame.transform.scale(pygame.image.load('Sprites/Painel/painel2.png'), (self.tile_size_wd, self.tile_size_ht))
         self.game = game
         self.map_layout = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5],
+        [5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5],
+        [5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+        [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
         ]
         self.pontos_string = "Pontuação: "
@@ -54,30 +56,34 @@ class Map(pygame.sprite.Sprite):
         for y, row in enumerate(self.map_layout):
             for x, tile in enumerate(row):
                 if tile == 1:
-                    if (x == 0 and y == 0):
+                    self.map_surface.blit(self.grass_chao_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
+                    self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
+
+                elif tile == 2:
+                    if (x == 1 and y == 1):
                         self.map_surface.blit(self.bar_esq_sup_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(x == len(row) - 1 and y == 0):
+                        
+                    elif(x == len(row) - 2 and y == 1):
                         self.map_surface.blit(self.bar_dir_sup_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(x == 0 and y == len(self.map_layout) - 2): 
+                        
+                    elif(x == 1 and y == len(self.map_layout) - 3): 
                         self.map_surface.blit(self.bar_esq_inf_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(x == len(row) - 1 and y == len(self.map_layout) - 2):
+                        
+                    elif(x == len(row) - 2 and y == len(self.map_layout) - 3):
                         self.map_surface.blit(self.bar_dir_inf_sprite, (x * self.tile_size_wd, y * self.tile_size_ht)) 
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht)) 
-                    elif(x == 0):
+                         
+                    elif(x == 1):
                         self.map_surface.blit(self.bar_esq_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(y == 0):
+                        
+                    elif(y == 1):
                         self.map_surface.blit(self.bar_sup_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(y == len(self.map_layout) - 2):   
+                        
+                    elif(y == len(self.map_layout) - 3):   
                         self.map_surface.blit(self.bar_inf_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                    elif(x == len(row) - 1):
+                        
+                    elif(x == len(row) - 2):
                         self.map_surface.blit(self.bar_dir_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
-                        self.map_surface.blit(self.grass_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
+                        
                 elif tile == 3:
                     if(y == len(self.map_layout) - 1):
                         self.map_surface.blit(self.hud_sprite, (x * self.tile_size_wd, self.game.screen.get_height() - self.tile_size_ht))   
@@ -85,6 +91,11 @@ class Map(pygame.sprite.Sprite):
                         self.map_surface.blit(self.hud_esq_sprite, (0, self.game.screen.get_height() - self.tile_size_ht))
                     if(x == len(row) - 1 and y == len(self.map_layout) - 1):
                         self.map_surface.blit(self.hud_dir_sprite, (x * self.tile_size_wd, self.game.screen.get_height() - self.tile_size_ht))
+                elif tile == 4:
+                    self.map_surface.blit(self.grass_chao_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
+                    self.map_surface.blit(self.cerca_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
+                elif tile == 5:
+                    self.map_surface.blit(self.grass_chao_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
                 else:
                     self.map_surface.blit(self.chao_sprite, (x * self.tile_size_wd, y * self.tile_size_ht))
 
