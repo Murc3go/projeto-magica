@@ -17,19 +17,17 @@ class Player(pygame.sprite.Sprite):
         self.radius = 30
         self.vida = 5
         self.projetil = []
-        self.taxa_disparo = 0.95
+        self.taxa_disparo = 0.75
         self.ult_disparo =  - self.taxa_disparo
         self.atirando = False
-        self.tamanho = 60
+        self.tamanho = 40
         self.sprite_width = 16
         self.sprite_height = 16
         self.aura_width = 32
         self.aura_height = 32
         self.aura_tamanho = 100
-        self.aura_start = False
         self.direcao_atual = "baixo"
         self.movimentacao = False
-        self.aura_current = 0
         self.aura_frames = []
         self.cima_frames = []
         self.baixo_frames = []
@@ -277,12 +275,6 @@ class Player(pygame.sprite.Sprite):
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
-        
-        self.rect_aura.topleft = (self.x - 20, self.y - 5)
-
-        
-        
-        
 
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
@@ -352,11 +344,6 @@ class Player(pygame.sprite.Sprite):
             elif self.direcao_atual == "direita":
                 self.game.screen.blit(self.parado_direita, (self.rect_par_dir.x, self.rect_par_dir.y))
                 
-        if self.aura_start:
-            # if self.aura_current >= len(self.aura_frames) * self.game.frame_rate:
-            #     self.aura_start = False
-            # else:
-                self.game.screen.blit(self.aura_frames[self.aura_current // self.game.frame_rate ], (self.x, self.y))  # Supondo que x e y são as coordenadas do jogador
         for projetil in self.projetil:
             
             projetil.draw()
@@ -365,7 +352,7 @@ class Player(pygame.sprite.Sprite):
         agora = time.time()
         
         if agora - self.ult_disparo >= self.taxa_disparo:
-            self.atirando = True
+            # self.aura_start = True
             self.ult_disparo = agora  # Atualiza o último disparo
         
         
@@ -380,3 +367,6 @@ class Player(pygame.sprite.Sprite):
             # Cria um novo projétil na posição do player que vai em direção ao mouse
             novo_projetil = Magica(self.game, self.centro_x, self.centro_y, mouse_x, mouse_y)
             self.projetil.append(novo_projetil)
+            
+    
+            
