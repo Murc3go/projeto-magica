@@ -1,8 +1,6 @@
 import pygame
 import random
 import math
-from spritesheet import Spritesheet
-
 
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, game, inimigo_speed):

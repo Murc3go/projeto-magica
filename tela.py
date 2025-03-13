@@ -51,6 +51,7 @@ class Map(pygame.sprite.Sprite):
         ]
         self.pontos_string = "Pontuação: "
         self.vida_string = "Vidas: "
+        self.moedas_string = "Moedas: "
         self.font = pygame.font.Font("Font/NormalFont.ttf", 20)
         self.map_surface = pygame.Surface((1024, 768))
         for y, row in enumerate(self.map_layout):
@@ -103,7 +104,7 @@ class Map(pygame.sprite.Sprite):
         self.game.screen.blit(self.map_surface, (0, 0))
 
         # Renderiza a pontuação e vida
-        hud_jogador = self.font.render((self.pontos_string + str(self.game.pontos) + "     " + self.vida_string + str(jogador.vida)), True, ('white'))
+        hud_jogador = self.font.render((self.pontos_string + str(self.game.pontos) + "     " + self.vida_string + str(jogador.vida) + "     " + self.moedas_string + str(self.game.moedas)), True, ('white'))
         screen_width = self.game.screen.get_width()
         cent_hud = (screen_width - hud_jogador.get_width()) / 2
         self.game.screen.blit(hud_jogador, (cent_hud, 735))

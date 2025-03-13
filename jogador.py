@@ -237,10 +237,8 @@ class Player(pygame.sprite.Sprite):
             
         self.movimentacao = False
 
-        # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
 
-        # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
             self.x -= self.speed
             self.movimentacao = True

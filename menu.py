@@ -61,8 +61,6 @@ class Menu:
             pygame.display.flip()
 
             for event in pygame.event.get():
-                # self.botao_start.checar_interacao(event)
-                # self.botao_exit.checar_interacao(event)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
@@ -97,9 +95,9 @@ class GameOver:
                     pygame.quit()
                     exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_s:  # Começar o jogo
+                    if event.key == pygame.K_s:
                         self.game.game_over = False
                         self.game.new_game()
-                    if event.key == pygame.K_e:  # Sair do jogo
+                    if event.key == pygame.K_e:
                         pygame.quit()
                         exit()

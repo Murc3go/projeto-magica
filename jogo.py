@@ -18,6 +18,7 @@ class Game:
         self.game_over = False
         self.current_frame = 0
         self.frame_rate = 10
+        print("VITOR COCUDO")
         self.new_game()
             
 
@@ -25,6 +26,7 @@ class Game:
         self.map = Map(self)
         self.player = Player(self)
         self.pontos = 0
+        self.moedas = 0
         self.num_inimigos = 2
         self.inimigo_speed = 2
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
@@ -58,7 +60,7 @@ class Game:
                 # item.update()
                 if item.acerto_jogador(self.player):
                     self.itens.remove(item) 
-                    self.pontos += 10
+                    self.moedas += 1
         
      
             # Atualiza a tela
