@@ -1,40 +1,26 @@
 import pygame
+import random
+import math
 
-class ItemVida:
-    def __init__(self,game):
+
+class Item:
+    def __init__(self, game, x, y):
         self.game = game
-        self.x, self.y = self.spawn_posicao()
-        self.radius = 30
-    
-    def spawn_posicao(self):
-        pass
+        self.x = x
+        self.y = y
+        self.radius = 20
+        self.tamanho = 35
+
+
+    def acerto_jogador(self, jogador):
+
+        distance = math.sqrt((self.x - jogador.x) ** 2 + (self.y - jogador.y) ** 2)
+        return distance <= self.tamanho + jogador.radius
+
     def update(self):
         pass
-    def draw(self):
-        pass
 
-class ItemPontosBonus:
-    def __init__(self,game):
-        self.game = game
-        self.x, self.y = self.spawn_posicao()
-        self.radius = 30
-    
-    def spawn_posicao(self):
-        pass
-    def update(self):
-        pass
     def draw(self):
-        pass
-
-class ItemDisparoRapido:
-    def __init__(self,game):
-        self.game = game
-        self.x, self.y = self.spawn_posicao()
-        self.radius = 30
-    
-    def spawn_posicao(self):
-        pass
-    def update(self):
-        pass
-    def draw(self):
-        pass
+        pygame.draw.circle(
+            self.game.screen, 'red', (int(self.x), int(self.y)), self.radius
+        )

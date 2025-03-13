@@ -19,8 +19,7 @@ class Game:
         self.current_frame = 0
         self.frame_rate = 10
         self.new_game()
-
-              
+            
 
     def new_game(self):
         self.map = Map(self)
@@ -30,12 +29,14 @@ class Game:
         self.inimigo_speed = 2
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
         self.dificuldade = Dificuldade(self, self.inimigos)
+        self.itens = []
 
         
     
     def spawn_inimigos(self):
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
         self.dificuldade.subindo_dificuldade()   
+        
     def update(self):
         if not self.game_over:
 
@@ -52,6 +53,12 @@ class Game:
         
             if len(self.inimigos) == 0:
                 self.spawn_inimigos()
+            
+            for item in self.itens[:]:
+                # item.update()
+                if item.acerto_jogador(self.player):
+                    self.itens.remove(item) 
+                    self.pontos += 10
         
      
             # Atualiza a tela
@@ -67,6 +74,9 @@ class Game:
         self.player.draw()
         for inimigo in self.inimigos:
             inimigo.draw()
+            
+        for item in self.itens:
+            item.draw()
         
     def check_events(self):
         

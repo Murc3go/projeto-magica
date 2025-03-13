@@ -62,7 +62,6 @@ class Inimigo(pygame.sprite.Sprite):
             grid_x = int(x // 55)
             grid_y = int(y // 55)
 
-            # Verifica se a posição no mapa não é uma barreira (células com 1)
             if (grid_x, grid_y) not in self.game.map.map_layout:
                 
                 # Verifica a distância do jogador
@@ -105,5 +104,4 @@ class Inimigo(pygame.sprite.Sprite):
     
     def draw(self):
         if self.vida:
-            # pygame.draw.circle(self.game.screen, 'red', (self.x, self.y), (self.radius))
             self.game.screen.blit(self.frames[self.game.current_frame // self.game.frame_rate], (self.rect.x, self.rect.y)) 

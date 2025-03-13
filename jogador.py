@@ -277,7 +277,7 @@ class Player(pygame.sprite.Sprite):
                     
         
         for projetil in self.projetil:
-            projetil.update(self.game.inimigos)
+            projetil.update(self.game.inimigos, self.game.itens)
             
         # Remove balas que saíram da tela
         self.projetil = [projetil for projetil in self.projetil if 0 < projetil.x < 1366 and 0 < projetil.y < 768]
@@ -285,7 +285,6 @@ class Player(pygame.sprite.Sprite):
 
     
     def draw(self):
-        # pygame.draw.circle(self.game.screen, 'blue', (self.x, self.y), (self.radius))
         
         # Renderiza o sprite parado dependendo da direção
         if self.movimentacao:
