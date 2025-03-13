@@ -9,7 +9,6 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.spritesheet_mov = pygame.image.load('Sprites/Personagens/Player/jogador_mov.png').convert_alpha() 
         self.spritesheet_par = pygame.image.load('Sprites/Personagens/Player/jogador_par.png').convert_alpha() 
-        self.spritesheet_aura = pygame.image.load('Sprites/FX/Aura.png').convert_alpha() 
         self.game = game
         self.x = 100
         self.y = 100
@@ -17,20 +16,14 @@ class Player(pygame.sprite.Sprite):
         self.radius = 30
         self.vida = 5
         self.projetil = []
-        self.taxa_disparo = 0.95
+        self.taxa_disparo = 0.75
         self.ult_disparo =  - self.taxa_disparo
         self.atirando = False
-        self.tamanho = 60
+        self.tamanho = 40
         self.sprite_width = 16
         self.sprite_height = 16
-        self.aura_width = 32
-        self.aura_height = 32
-        self.aura_tamanho = 100
-        self.aura_start = False
         self.direcao_atual = "baixo"
         self.movimentacao = False
-        self.aura_current = 0
-        self.aura_frames = []
         self.cima_frames = []
         self.baixo_frames = []
         self.esquerda_frames = []
@@ -40,37 +33,6 @@ class Player(pygame.sprite.Sprite):
         self.parado_esquerda = None
         self.parado_direita = None
         
-        #SPRITE AURA
-        for row in range(1):  # 0 linhas de frames
-            for col in range(4):  # 4 colunas de frames
-                if row == 0 and col == 0:
-                    # Calculando a posição de cada frame
-                    frame_x = col * self.aura_width
-                    frame_y = row * self.aura_height
-                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
-                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
-                    self.aura_frames.append(aura_frame)
-                elif row == 0 and col == 1:
-                    frame_x = col * self.aura_width
-                    frame_y = row * self.aura_height
-                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
-                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
-                    self.aura_frames.append(aura_frame)
-                elif row == 0 and col == 2:
-                    frame_x = col * self.aura_width
-                    frame_y = row * self.aura_height
-                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
-                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
-                    self.aura_frames.append(aura_frame)
-                elif row == 0 and col == 3:
-                    frame_x = col * self.aura_width
-                    frame_y = row * self.aura_height
-                    aura_frame = self.spritesheet_aura.subsurface((frame_x, frame_y, self.aura_width, self.aura_height))
-                    aura_frame = pygame.transform.scale(aura_frame, (self.aura_tamanho, self.aura_tamanho))
-                    self.aura_frames.append(aura_frame)
-                    
-        self.aura_img = self.aura_frames[0]
-        self.rect_aura = self.aura_img.get_rect()   
         
         #SPRITE PARADO
         for row in range(1):  # 0 linhas de frames
@@ -277,12 +239,6 @@ class Player(pygame.sprite.Sprite):
 
         # Verifica quais teclas estão pressionadas
         keys = pygame.key.get_pressed()
-        
-        self.rect_aura.topleft = (self.x - 20, self.y - 5)
-
-        
-        
-        
 
         # Movimenta o jogador baseado nas teclas
         if keys[pygame.K_a]:
@@ -352,11 +308,6 @@ class Player(pygame.sprite.Sprite):
             elif self.direcao_atual == "direita":
                 self.game.screen.blit(self.parado_direita, (self.rect_par_dir.x, self.rect_par_dir.y))
                 
-        if self.aura_start:
-            # if self.aura_current >= len(self.aura_frames) * self.game.frame_rate:
-            #     self.aura_start = False
-            # else:
-                self.game.screen.blit(self.aura_frames[self.aura_current // self.game.frame_rate ], (self.x, self.y))  # Supondo que x e y são as coordenadas do jogador
         for projetil in self.projetil:
             
             projetil.draw()
@@ -365,7 +316,7 @@ class Player(pygame.sprite.Sprite):
         agora = time.time()
         
         if agora - self.ult_disparo >= self.taxa_disparo:
-            self.atirando = True
+            # self.aura_start = True
             self.ult_disparo = agora  # Atualiza o último disparo
         
         
@@ -380,3 +331,6 @@ class Player(pygame.sprite.Sprite):
             # Cria um novo projétil na posição do player que vai em direção ao mouse
             novo_projetil = Magica(self.game, self.centro_x, self.centro_y, mouse_x, mouse_y)
             self.projetil.append(novo_projetil)
+            
+    
+            

@@ -13,7 +13,7 @@ class Inimigo(pygame.sprite.Sprite):
         self.speed = inimigo_speed
         self.radius = 20
         self.vida = True
-        self.tamanho = 40
+        self.tamanho = 35
         self.sprite_width = 16
         self.sprite_height = 16
         self.num_frames = 16
