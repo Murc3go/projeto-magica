@@ -9,8 +9,8 @@ class Botao:
         self.texto = self.fonte.render(texto, True, ('white'))
         self.texto_wd = self.texto.get_width()
         self.clicado = False
-        self.sprite_normal = pygame.transform.scale(pygame.image.load("Sprites/PainelMenu/Botões/button_normal_resized_32x16.png"), (200, 80))
-        self.sprite_hover = pygame.transform.scale(pygame.image.load("Sprites/PainelMenu/Botões/button_hover_resized.png"), (200, 80))
+        self.sprite_normal = pygame.transform.scale(pygame.image.load("Sprites/PainelMenu/Botões/button_normal.png"), (200, 80))
+        self.sprite_hover = pygame.transform.scale(pygame.image.load("Sprites/PainelMenu/Botões/button_hover.png"), (200, 80))
         self.sprite_pressed = pygame.transform.scale(pygame.image.load("Sprites/PainelMenu/Botões/button_pressed.png"), (200, 80))
         self.sprite = self.sprite_normal
         self.sprite_rect = self.sprite.get_rect(center=(self.screen.get_width() // 2, self.y))
@@ -29,7 +29,7 @@ class Botao:
         if self.sprite_rect.collidepoint(mouse_pos):
             if pygame.mouse.get_pressed()[0]:
                 self.sprite = self.sprite_pressed
-                self.texto_y_atual = self.sprite_rect.centery - self.texto.get_height() // 2 + 5
+                self.texto_y_atual = self.sprite_rect.centery - self.texto.get_height() // 2 + 2
                 self.clicado = True
             else:
                 self.sprite = self.sprite_hover
@@ -48,7 +48,7 @@ class Menu:
         self.fonte = pygame.font.Font("Font/NormalFont.ttf", 40)
         
         self.menu_ativo = True
-        self.sprite = pygame.transform.scale(pygame.image.load('Sprites/PainelMenu/menu-inicial_resized_256x256.png'), (self.screen.get_width(), self.screen.get_height()))
+        self.sprite = pygame.transform.scale(pygame.image.load('Sprites/PainelMenu/menu-inicial.png'), (self.screen.get_width(), self.screen.get_height()))
         self.botao_start = Botao(300,"INICIAR", self.screen)
         self.botao_exit = Botao(400, "SAIR", self.screen)
     def mostrar_menu(self):
