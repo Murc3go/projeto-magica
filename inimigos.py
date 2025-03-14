@@ -9,9 +9,10 @@ class Inimigo(pygame.sprite.Sprite):
         self.game = game
         self.x, self.y = self.spawn_posicao()
         self.speed = inimigo_speed
-        self.radius = 20
         self.vida = True
         self.tamanho = 35
+        self.sprite_sombra = pygame.transform.scale(pygame.image.load("Sprites/Particulas/sombra.png"), (35, 12))
+        self.sombra_rect = self.sprite_sombra.get_rect(topleft=(self.x, self.y + 32))
         self.sprite_width = 16
         self.sprite_height = 16
         self.num_frames = 16
@@ -77,9 +78,7 @@ class Inimigo(pygame.sprite.Sprite):
         return distance <= self.tamanho + bala.radius
     
     def acerto_jogador(self, jogador):
-        # Verifica se a distância entre o centro do jogodor e o inimigo é menor ou igual à soma dos raios
-        distance = math.sqrt((self.x - jogador.x) ** 2 + (self.y - jogador.y) ** 2)
-        return distance <= self.tamanho + jogador.radius
+        return self.rect.colliderect(jogador.rect)
     
     def update(self, jogador):
        if self.vida:
@@ -97,9 +96,11 @@ class Inimigo(pygame.sprite.Sprite):
             self.x += dx * self.speed
             self.y += dy * self.speed
             
+            self.sombra_rect.topleft = self.x, self.y + 32
             self.rect.topleft = (self.x, self.y)
 
     
     def draw(self):
         if self.vida:
+            self.game.screen.blit(self.sprite_sombra, self.sombra_rect)
             self.game.screen.blit(self.frames[self.game.current_frame // self.game.frame_rate], (self.rect.x, self.rect.y)) 

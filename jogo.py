@@ -18,9 +18,8 @@ class Game:
         self.game_over = False
         self.current_frame = 0
         self.frame_rate = 10
-        print("VITOR COCUDO")
         self.new_game()
-            
+        
 
     def new_game(self):
         self.map = Map(self)
@@ -32,7 +31,8 @@ class Game:
         self.inimigos = [Inimigo(self, self.inimigo_speed) for _ in range(self.num_inimigos)]
         self.dificuldade = Dificuldade(self, self.inimigos)
         self.itens = []
-
+        self.animation_itens = pygame.sprite.Group()
+        self.dt = self.clock.tick(fps) / 1000
         
     
     def spawn_inimigos(self):
@@ -56,12 +56,15 @@ class Game:
             if len(self.inimigos) == 0:
                 self.spawn_inimigos()
             
+
+            self.animation_itens.update(self.dt)
+
             for item in self.itens[:]:
                 # item.update()
                 if item.acerto_jogador(self.player):
                     self.itens.remove(item) 
                     self.moedas += 1
-        
+
      
             # Atualiza a tela
             pygame.display.flip()

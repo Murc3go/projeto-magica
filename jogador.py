@@ -13,7 +13,6 @@ class Player(pygame.sprite.Sprite):
         self.x = 100
         self.y = 100
         self.speed = 5
-        self.radius = 30
         self.vida = 5
         self.projetil = []
         self.taxa_disparo = 0.75
@@ -32,7 +31,9 @@ class Player(pygame.sprite.Sprite):
         self.parado_cima = None
         self.parado_esquerda = None
         self.parado_direita = None
-        
+        self.rect = pygame.Rect(self.x, self.y, self.tamanho, self.tamanho)
+        self.sprite_sombra = pygame.transform.scale(pygame.image.load("Sprites/Particulas/sombra.png"), (38, 15))
+        self.sombra_rect = self.sprite_sombra.get_rect(topleft=(self.x + 1, self.y + 32))
         
         #SPRITE PARADO
         for row in range(1):  # 0 linhas de frames
@@ -198,7 +199,6 @@ class Player(pygame.sprite.Sprite):
         self.rect_direita = self.direita_image.get_rect()
     
     def update_direction(self):
-        # Pega a posição do mouse
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         # Calcula o centro do jogador
@@ -219,20 +219,26 @@ class Player(pygame.sprite.Sprite):
         if -45 <= angulo_graus < 45:
             self.direcao_atual = "direita"
             self.rect_direita.topleft = (self.x, self.y)
+
         elif 45 <= angulo_graus < 135:
             self.direcao_atual = "baixo"
             self.rect_baixo.topleft = (self.x, self.y)
+
         elif -135 <= angulo_graus < -45:
             self.direcao_atual = "cima"
             self.rect_cima.topleft = (self.x, self.y)
+
         else:
             self.direcao_atual = "esquerda"
-            self.rect_esquerda.topleft = (self.x, self.y)   
+            self.rect_esquerda.topleft = (self.x, self.y)
+
+        
+        self.rect.topleft = (self.x, self.y)
 
         
         
     def update(self, inimigos):
-        
+        self.sombra_rect.topleft = self.x + 1, self.y + 32
         self.update_direction()
             
         self.movimentacao = False
@@ -256,12 +262,16 @@ class Player(pygame.sprite.Sprite):
         if not self.movimentacao:
             if self.direcao_atual == "esquerda":
                 self.rect_par_esq.topleft = (self.x, self.y)
+                self.rect.topleft = self.rect_par_esq.topleft
             elif self.direcao_atual == "direita":
                 self.rect_par_dir.topleft = (self.x, self.y)
+                self.rect.topleft = self.rect_par_dir.topleft
             elif self.direcao_atual == "cima":
                 self.rect_par_cima.topleft = (self.x, self.y)
+                self.rect.topleft = self.rect_par_cima.topleft
             elif self.direcao_atual == "baixo":
                 self.rect_par_baixo.topleft = (self.x, self.y)
+                self.rect.topleft = self.rect_par_baixo.topleft
 
         
         inimigos_a_remover = []
@@ -275,7 +285,7 @@ class Player(pygame.sprite.Sprite):
                     
         
         for projetil in self.projetil:
-            projetil.update(self.game.inimigos, self.game.itens)
+            projetil.update(self.game.inimigos, self.game.itens, self.projetil)
             
         # Remove balas que saíram da tela
         self.projetil = [projetil for projetil in self.projetil if 0 < projetil.x < 1366 and 0 < projetil.y < 768]
@@ -283,7 +293,7 @@ class Player(pygame.sprite.Sprite):
 
     
     def draw(self):
-        
+        self.game.screen.blit(self.sprite_sombra, self.sombra_rect)
         # Renderiza o sprite parado dependendo da direção
         if self.movimentacao:
             if self.direcao_atual == "cima":
@@ -314,10 +324,8 @@ class Player(pygame.sprite.Sprite):
         
         if agora - self.ult_disparo >= self.taxa_disparo:
             # self.aura_start = True
-            self.ult_disparo = agora  # Atualiza o último disparo
-        
-        
-            # Obtém a posição atual do mouse
+            self.ult_disparo = agora 
+            
             mouse_x, mouse_y = pygame.mouse.get_pos()
             
             
